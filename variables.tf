@@ -34,8 +34,7 @@ variable "cluster_identifier_prefix" {
 
 variable "cluster_identifier" {
   description = "Nome que será atribuido ao novo cluster. Conflita com `cluster_identifier_prefix`"
-  type        = string 
-  default     = null   
+  type        = string
 }
 
 variable "copy_tags_to_snapshot" {
@@ -51,7 +50,7 @@ variable "database_name" {
 }
 
 variable "deletion_protection" {
-  description = "Habilita a proteção de deletar o database"
+  description = "Habilita a proteção de deletar o database. Para deletar a instância deve ser `false` o valor"
   type        = bool
   default     = true
 }
@@ -59,15 +58,14 @@ variable "deletion_protection" {
 variable "db_cluster_parameter_group_name" {
   description = "O parameter group que será associado ao cluster"
   type        = string 
-  default     = null 
+  default     = null
 }
 
 variable "parameter_group_family" {
   description = "O parameter group que será associado ao cluster"
-  type        = string 
-  default     = null
+  type        = string
   validation {
-    condition     = var.parameter_group_family != null
+    condition     = var.parameter_group_family != null && var.parameter_group_family != ""
     error_message = "Please specify the parameter group family (parameter_group_family)." 
   }
 }
@@ -99,9 +97,8 @@ variable "engine_mode" {
 variable "engine_version" {
   description = "Major version da engine que será utilizada. Caso não seja específicado, será utilizado a versão estável mais recente."
   type        = string
-  default     = null
   validation {
-    condition     = var.engine_version != null
+    condition     = var.engine_version != null && var.engine_version != ""
     error_message = "Please specify the engine version (engine_version)."
   } 
 }
@@ -119,7 +116,7 @@ variable "final_snapshot_identifier" {
 }
 
 variable "global_cluster_identifier" {
-  description = "Caso este cluster faça parte de um cluster, global. Especificar o identifier dele"
+  description = "Caso este cluster faça parte de um cluster global. Especificar o identifier dele"
   type        = string 
   default     = null 
 }
@@ -133,7 +130,7 @@ variable "iam_database_authentication_enabled" {
 variable "iam_roles" {
   description = "Uma lista de IAM Roles para atrelar ao cluster no caso de iam_database_authentication_enabled"
   type        = list(string)
-  default     = null  
+  default     = null
 }
 variable "kms_key_id" {
   description = "O ARN da chave KMS. Deve ser especificado caso o storage_encrypted seja `true`"
@@ -144,13 +141,11 @@ variable "kms_key_id" {
 variable "master_password" {
   description = "Senha do usuário master que será criado na inicialização do cluster. Não é necessário se snapshot_identifier ou replicate_source_db for utilizado."
   type        = string
-  default     = null  
 }
 
 variable "master_username" {
   description = "Nome do usuário master que será criado na inicialização do cluster. Não é necessário se snapshot_identifier ou replicate_source_db for utilizado."
   type        = string
-  default     = null    
 }
 
 variable "port" {
@@ -318,40 +313,39 @@ variable "subnet_ids" {
   default     = null 
 }
 
-variable "writer_endpoint_name" {
-  description                               = "DNS que será utilizado pelo endpoint de R/W (Primário)."
-  type                                      = string 
-  default                                   = null 
-}
+# variable "writer_endpoint_name" {
+#   description                               = "DNS que será utilizado pelo endpoint de R/W (Primário)."
+#   type                                      = string 
+#   default                                   = null 
+# }
 
-variable "writer_record_ttl" {
-  description                               = "TTL do registro do endpoint de R/W (Primário)"
-  type                                      = number
-  default                                   = 300 
-}
+# variable "writer_record_ttl" {
+#   description                               = "TTL do registro do endpoint de R/W (Primário)"
+#   type                                      = number
+#   default                                   = 300 
+# }
 
-variable "reader_endpoint_name" {
-  description = "DNS que será utilizado pelo endpoint de R (Todas as réplicas)."
-  type        = string
-  default     = null 
-}
+# variable "reader_endpoint_name" {
+#   description = "DNS que será utilizado pelo endpoint de R (Todas as réplicas)."
+#   type        = string
+#   default     = null 
+# }
 
-variable "reader_record_ttl" {
-  description = "TTL do registro do endpoint de leitura"
-  type        = number
-  default     = 300
-}
+# variable "reader_record_ttl" {
+#   description = "TTL do registro do endpoint de leitura"
+#   type        = number
+#   default     = 300
+# }
+
+# variable "zone_id" {
+#   description = "Id da zona do Route53 que serão criados os registros DNS"
+#   type        = string
+#   default     = null
+# }
 
 variable "vpc_id" {
   description = "ID da VPC onde os recursos serão criados"
   type        = string
-  default     = null
-}
-
-variable "zone_id" {
-  description = "Id da zona do Route53 que serão criados os registros DNS"
-  type        = string
-  default     = null
 }
 
 variable "cidr_blocks" {

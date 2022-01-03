@@ -72,7 +72,7 @@ resource "aws_security_group" "cluster" {
 
   ingress {
     cidr_blocks       = var.cidr_blocks
-    description       = "Inbound rules for: ${var.engine}"
+    description       = "Inbound rules"
     from_port         = local.port
     to_port           = local.port
     ipv6_cidr_blocks  = null
@@ -97,28 +97,29 @@ resource "aws_security_group" "cluster" {
 }
 
 
-resource "aws_route53_record" "endpoint" {
-  zone_id                                   = var.zone_id 
-  name                                      = var.writer_endpoint_name
-  type                                      = "CNAME"
-  ttl                                       = var.writer_record_ttl
-  records                                   = [ aws_rds_cluster.cluster.endpoint ]
-  depends_on = [
-    aws_rds_cluster.cluster
-  ]
-}
+
+# resource "aws_route53_record" "endpoint" {
+#   zone_id                                   = var.zone_id 
+#   name                                      = var.writer_endpoint_name
+#   type                                      = "CNAME"
+#   ttl                                       = var.writer_record_ttl
+#   records                                   = [ aws_rds_cluster.cluster.endpoint ]
+#   depends_on = [
+#     aws_rds_cluster.cluster
+#   ]
+# }
 
 
-resource "aws_route53_record" "reader_endpoint" {
-  zone_id                                   = var.zone_id 
-  name                                      = var.reader_endpoint_name
-  type                                      = "CNAME"
-  ttl                                       = var.reader_record_ttl
-  records                                   = [ aws_rds_cluster.cluster.reader_endpoint ]
-  depends_on = [
-    aws_rds_cluster.cluster
-  ]
-}
+# resource "aws_route53_record" "reader_endpoint" {
+#   zone_id                                   = var.zone_id 
+#   name                                      = var.reader_endpoint_name
+#   type                                      = "CNAME"
+#   ttl                                       = var.reader_record_ttl
+#   records                                   = [ aws_rds_cluster.cluster.reader_endpoint ]
+#   depends_on = [
+#     aws_rds_cluster.cluster
+#   ]
+# }
 
 
 resource "aws_rds_cluster" "cluster" {
